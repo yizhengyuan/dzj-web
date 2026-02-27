@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI大藏经 - 金刚经</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: "Noto Serif SC", "SimSun", serif; background: #f5f0e8; color: #333; line-height: 1.8; }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        header { text-align: center; padding: 40px 0; border-bottom: 2px solid #8b4513; margin-bottom: 30px; }
+        h1 { font-size: 2.5em; color: #8b4513; margin-bottom: 10px; }
+        .subtitle { color: #666; font-size: 1.1em; }
+        .nav { display: flex; justify-content: center; gap: 10px; margin-bottom: 30px; flex-wrap: wrap; }
+        .nav button { padding: 10px 20px; border: 1px solid #8b4513; background: #fff; color: #8b4513; cursor: pointer; border-radius: 4px; font-family: inherit; transition: all 0.3s; }
+        .nav button:hover, .nav button.active { background: #8b4513; color: #fff; }
+        .content { background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .chapter-list { display: grid; gap: 10px; }
+        .chapter-item { padding: 15px 20px; background: #faf8f5; border-left: 4px solid #8b4513; cursor: pointer; transition: all 0.3s; }
+        .chapter-item:hover { background: #f0ebe3; transform: translateX(5px); }
+        .chapter-item .num { color: #8b4513; font-weight: bold; margin-right: 10px; }
+        .sutra-text { font-size: 1.2em; line-height: 2; text-align: justify; margin-bottom: 30px; }
+        .sutra-text .title { text-align: center; font-size: 1.5em; color: #8b4513; margin-bottom: 20px; }
+        .key-phrases { background: #faf8f5; padding: 15px 20px; border-radius: 4px; margin-bottom: 20px; }
+        .key-phrases h3 { color: #8b4513; margin-bottom: 10px; font-size: 1em; }
+        .key-phrases span { display: inline-block; padding: 5px 12px; background: #fff; border: 1px solid #ddd; border-radius: 20px; margin: 5px; font-size: 0.9em; cursor: pointer; }
+        .key-phrases span:hover { background: #8b4513; color: #fff; }
+        .commentary { margin-top: 30px; padding-top: 20px; border-top: 1px dashed #ccc; }
+        .commentary h3 { color: #8b4513; margin-bottom: 15px; }
+        .commentary-item { margin-bottom: 20px; padding: 15px; background: #faf8f5; border-radius: 4px; }
+        .commentary-item .author { color: #8b4513; font-weight: bold; margin-bottom: 5px; }
+        .commentary-item .source { color: #999; font-size: 0.9em; margin-bottom: 10px; }
+        .concept-card { background: #faf8f5; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
+        .concept-card h3 { color: #8b4513; font-size: 1.5em; margin-bottom: 5px; }
+        .concept-card .sanskrit { color: #666; font-style: italic; margin-bottom: 15px; }
+        .concept-card .related { margin-top: 15px; padding-top: 15px; border-top: 1px dashed #ccc; }
+        .hidden { display: none; }
+        .back-btn { display: inline-block; padding: 8px 15px; background: #f0ebe3; color: #8b4513; border-radius: 4px; margin-bottom: 20px; cursor: pointer; }
+        .back-btn:hover { background: #e0dbd3; }
+        footer { text-align: center; padding: 30px; color: #999; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>AI大藏经</h1>
+            <p class="subtitle">金刚般若波罗蜜经 · 交互学习</p>
+        </header>
+        
+        <nav class="nav">
+            <button class="active" onclick="showView('chapters')">经文章节</button>
+            <button onclick="showView('concepts')">核心概念</button>
+            <button onclick="showView('commentaries')">历代注疏</button>
+        </nav>
+        
+        <div class="content">
+            <div id="chapters-view" class="view">
+                <div class="chapter-list" id="chapterList"></div>
+            </div>
+            
+            <div id="chapter-detail" class="view hidden">
+                <span class="back-btn" onclick="backToChapters()">← 返回章节列表</span>
+                <div class="sutra-text" id="sutraText"></div>
+                <div class="key-phrases" id="keyPhrases"></div>
+                <div class="commentary" id="commentarySection"></div>
+            </div>
+            
+            <div id="concepts-view" class="view hidden">
+                <div id="conceptsList"></div>
+            </div>
+            
+            <div id="commentaries-view" class="view hidden">
+                <div id="commentariesList"></div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>愿以此功德，普及于一切</p>
+        </footer>
+    </div>
+    
+    <script>
+        const chapters = [
+            { num: 1, title: "法会因由分", content: "如是我闻。一时佛在舍卫国祇树给孤独园，与大比丘众千二百五十人俱。尔时世尊，食时，著衣持钵，入舍卫大城乞食。于其城中次第乞已，还至本处。饭食讫，收衣钵，洗足已，敷座而坐。", phrases: ["如是我闻", "祇树给孤独园", "次第乞食"] },
+            { num: 2, title: "善现启请分", content: "时长老须菩提，在大众中，即从座起，偏袒右肩，右膝著地，合掌恭敬而白佛言：「希有世尊！如来善护念诸菩萨，善付嘱诸菩萨。世尊！善男子、善女人，发阿耨多罗三藐三菩提心，应云何住？云何降伏其心？」佛言：「善哉善哉！须菩提！如汝所说，如来善护念诸菩萨，善付嘱诸菩萨。汝今谛听，当为汝说。善男子、善女人，发阿耨多罗三藐三菩提心，应如是住，如是降伏其心。」「唯然，世尊！愿乐欲闻。」", phrases: ["须菩提", "阿耨多罗三藐三菩提心", "应云何住", "降伏其心"] },
+            { num: 3, title: "大乘正宗分", content: "佛告须菩提：「诸菩萨摩诃萨，应如是降伏其心：所有一切众生之类，若卵生、若胎生、若湿生、若化生，若有色、若无色，若有想、若无想，若非有想非无想，我皆令入无余涅槃而灭度之。如是灭度无量无数无边众生，实无众生得灭度者。何以故？须菩提！若菩萨有我相、人相、众生相、寿者相，即非菩萨。」", phrases: ["降伏其心", "无余涅槃", "我相人相众生相寿者相"] },
+            { num: 4, title: "妙行无住分", content: "「复次须菩提！菩萨于法，应无所住，行于布施。所谓不住色布施，不住声香味触法布施。须菩提！菩萨应如是布施，不住于相。何以故？若菩萨不住相布施，其福德不可思量。须菩提！于意云何？东方虚空可思量不？」「不也，世尊！」「须菩提！南西北方四维上下虚空，可思量不？」「不也，世尊！」「须菩提！菩萨无住相布施，福德亦复如是，不可思量。须菩提！菩萨但应如所教住。」", phrases: ["应无所住", "行于布施", "不住相布施", "福德不可思量"] },
+            { num: 5, title: "如理实见分", content: "「须菩提！于意云何？可以身相见如来不？」「不也，世尊！不可以身相得见如来。何以故？如来所说身相，即非身相。」佛告须菩提：「凡所有相，皆是虚妄。若见诸相非相，即见如来。」", phrases: ["不可以身相见如来", "凡所有相皆是虚妄", "若见诸相非相即见如来"] },
+            { num: 6, title: "正信希有分", content: "须菩提白佛言：「世尊！颇有众生，得闻如是言说章句，生实信不？」佛告须菩提：「莫作是说！如来灭后，后五百岁，有持戒修福者，于此章句，能生信心，以此为实。当知是人，不于一佛二佛三四五佛而种善根，已于无量千万佛所种诸善根。闻是章句，乃至一念生净信者，须菩提！如来悉知悉见，是诸众生，得如是无量福德。何以故？是诸众生，无复我相、人相、众生相、寿者相，无法相，亦无非法相。何以故？是诸众生，若心取相，即为著我、人、众生、寿者；若取法相，即著我、人、众生、寿者。何以故？若取非法相，即著我、人、众生、寿者。是故不应取法，不应取非法。以是义故，如来常说：『汝等比丘！知我说法，如筏喻者，法尚应舍，何况非法。』」", phrases: ["后五百岁", "持戒修福", "一念生净信", "筏喻", "法尚应舍"] },
+            { num: 7, title: "无得无说分", content: "「须菩提！于意云何？如来得阿耨多罗三藐三菩提耶？如来有所说法耶？」须菩提言：「如我解佛所说义，无有定法名阿耨多罗三藐三菩提，亦无有定法如来可说。何以故？如来所说法，皆不可取、不可说，非法、非非法。所以者何？一切贤圣，皆以无为法而有差别。」", phrases: ["无有定法", "不可取不可说", "非法非非法", "无为法"] },
+            { num: 8, title: "依法出生分", content: "「须菩提！于意云何？若人满三千大千世界七宝，以用布施，是人所得福德，宁为多不？」须菩提言：「甚多，世尊！何以故？是福德，即非福德性，是故如来说福德多。」「若复有人，于此经中，受持乃至四句偈等，为他人说，其福胜彼。何以故？须菩提！一切诸佛，及诸佛阿耨多罗三藐三菩提法，皆从此经出。须菩提！所谓佛法者，即非佛法。」", phrases: ["三千大千世界七宝布施", "四句偈", "一切诸佛皆从此经出"] },
+            { num: 9, title: "一相无相分", content: "「须菩提！于意云何？须陀洹能作是念：『我得须陀洹果』不？」须菩提言：「不也，世尊！何以故？须陀洹名为入流，而无所入，不入色声香味触法，是名须陀洹。」...", phrases: ["须陀洹", "斯陀含", "阿那含", "阿罗汉"] },
+            { num: 10, title: "庄严净土分", content: "佛告须菩提：「于意云何？如来昔在然灯佛所，于法有所得不？」「不也，世尊！如来在然灯佛所，于法实无所得。」「须菩提！于意云何？菩萨庄严佛土不？」「不也，世尊！何以故？庄严佛土者，即非庄严，是名庄严。」「是故须菩提！诸菩萨摩诃萨，应如是生清净心，不应住色生心，不应住声香味触法生心，应无所住而生其心。」", phrases: ["然灯佛", "庄严佛土", "应无所住而生其心"] }
+        ];
+        
+        const concepts = [
+            { name: "般若", sanskrit: "Prajñā", def: "梵语，意为智慧，特指通达诸法实相的究竟智慧，非世间聪明才智。", chapters: [2,3,4,7,8] },
+            { name: "波罗蜜", sanskrit: "Pāramitā", def: "梵语，意为到彼岸，指从生死此岸度到涅槃彼岸的修行方法。", chapters: [1,4,7,8] },
+            { name: "阿耨多罗三藐三菩提", sanskrit: "Anuttara-samyak-saṃbodhi", def: "梵语，意为无上正等正觉，即佛果，最高最圆满的觉悟。", chapters: [2,7,8] },
+            { name: "无相", sanskrit: "Animitta", def: "不执着于任何形相，了知一切相皆是虚妄，不取于相。", chapters: [4,5,6] },
+            { name: "无住", sanskrit: "Apratiṣṭhāna", def: "心不执着于任何处所、境界或概念，于一切法无所住着。", chapters: [4,10] },
+            { name: "空性", sanskrit: "Śūnyatā", def: "诸法无自性，缘起性空，非断灭空，而是即有即空之中道。", chapters: [5,13,17] },
+            { name: "四句偈", sanskrit: "Gāthā", def: "指经中精要的四句颂文，如「一切有为法，如梦幻泡影」等。", chapters: [8,32] },
+            { name: "我相人相众生相寿者相", sanskrit: "Catvāri ātmadarśanāni", def: "四种错误的我执观念：执着于自我、他人、众生、寿命的实有。", chapters: [3,6,9] },
+            { name: "筏喻", sanskrit: "Kalpana", def: "佛说一切法如渡河的筏，既到彼岸，法尚应舍，何况非法。", chapters: [6] },
+            { name: "无为法", sanskrit: "Asaṃskṛta-dharma", def: "非因缘造作之法，指涅槃、实相、空性等超越生灭的真理。", chapters: [7] }
+        ];
+        
+        const commentaries = [
+            { author: "无著菩萨", dynasty: "印度（约4-5世纪）", title: "金刚般若论", type: "论", excerpt: "此经以显第一义、令众生得胜福、离诸见而说。'凡所有相，皆是虚妄'显第一义；'受持四句偈胜七宝布施'显胜福；'无我相等'显离诸见。" },
+            { author: "世亲菩萨", dynasty: "印度（约5世纪）", title: "金刚般若波罗蜜经论", type: "论", excerpt: "此经以'无相'为宗。所言'金刚'者，喻智慧能断烦恼，如金刚能坏一切物，而不被一切物所坏。'般若'者，智慧也。'波罗蜜'者，到彼岸也。" },
+            { author: "憨山德清", dynasty: "明代", title: "金刚经决疑", type: "注疏", excerpt: "金刚般若，乃吾佛为发大乘者说，为发最上乘者说。是知此经，乃六度之宗本，菩萨之心印也。善现即须菩提，秦言空生。此人出生之时，其家库藏空虚，故名空生。'应云何住？云何降伏其心？'此二问乃一部之纲宗。" },
+            { author: "蕅益智旭", dynasty: "明代", title: "金刚经破空论", type: "注疏", excerpt: "此经以'无住生心'为宗。无住者，不住生死，不住涅槃，不住一切相也。生心者，生六度万行心，生度脱众生心，生庄严佛土心也。'如是我闻'，信成就；'一时'，时成就；'佛'，主成就。" },
+            { author: "江味农居士", dynasty: "民国", title: "金刚经讲义", type: "讲记", excerpt: "金刚般若波罗蜜经，乃六百卷大般若之精华。佛说此经，专为发大乘者、发最上乘者，示以究竟无住之妙法。'金刚'有三义：坚固义、光明义、锐利义。佛日常乞食、食讫、洗足、敷座，皆示平常日用即是道也。" }
+        ];
+        
+        function init() {
+            renderChapters();
+            renderConcepts();
+            renderCommentaries();
+        }
+        
+        function renderChapters() {
+            const list = document.getElementById('chapterList');
+            list.innerHTML = chapters.map(c => `
+                <div class="chapter-item" onclick="showChapter(${c.num})">
+                    <span class="num">第${c.num}分</span>${c.title}
+                </div>
+            `).join('');
+        }
+        
+        function renderConcepts() {
+            const list = document.getElementById('conceptsList');
+            list.innerHTML = concepts.map(c => `
+                <div class="concept-card">
+                    <h3>${c.name}</h3>
+                    <div class="sanskrit">${c.sanskrit}</div>
+                    <div>${c.def}</div>
+                    <div class="related"><strong>相关章节：</strong>第${c.chapters.join('、')}分</div>
+                </div>
+            `).join('');
+        }
+        
+        function renderCommentaries() {
+            const list = document.getElementById('commentariesList');
+            list.innerHTML = commentaries.map(c => `
+                <div class="commentary-item">
+                    <div class="author">${c.author}</div>
+                    <div class="source">${c.dynasty} · 《${c.title}》[${c.type}]</div>
+                    <div>${c.excerpt}</div>
+                </div>
+            `).join('');
+        }
+        
+        function showChapter(num) {
+            const c = chapters.find(x => x.num === num);
+            if (!c) return;
+            
+            document.getElementById('sutraText').innerHTML = `
+                <div class="title">第${c.num}分 ${c.title}</div>
+                <p>${c.content}</p>
+            `;
+            
+            document.getElementById('keyPhrases').innerHTML = `
+                <h3>关键句</h3>
+                ${c.phrases.map(p => `<span>${p}</span>`).join('')}
+            `;
+            
+            const related = commentaries.slice(0, 3);
+            document.getElementById('commentarySection').innerHTML = `
+                <h3>历代注疏</h3>
+                ${related.map(com => `
+                    <div class="commentary-item">
+                        <div class="author">${com.author}</div>
+                        <div class="source">${com.dynasty} · 《${com.title}》</div>
+                        <div>${com.excerpt.substring(0, 150)}...</div>
+                    </div>
+                `).join('')}
+            `;
+            
+            showView('chapter-detail');
+        }
+        
+        function showView(viewName) {
+            document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
+            document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
+            
+            if (viewName === 'chapters') {
+                document.getElementById('chapters-view').classList.remove('hidden');
+                document.querySelector('.nav button:nth-child(1)').classList.add('active');
+            } else if (viewName === 'concepts') {
+                document.getElementById('concepts-view').classList.remove('hidden');
+                document.querySelector('.nav button:nth-child(2)').classList.add('active');
+            } else if (viewName === 'commentaries') {
+                document.getElementById('commentaries-view').classList.remove('hidden');
+                document.querySelector('.nav button:nth-child(3)').classList.add('active');
+            } else if (viewName === 'chapter-detail') {
+                document.getElementById('chapter-detail').classList.remove('hidden');
+            }
+        }
+        
+        function backToChapters() {
+            showView('chapters');
+        }
+        
+        init();
+    </script>
+</body>
+</html>
