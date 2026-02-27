@@ -441,7 +441,11 @@
         }
         
         // ============ AI 对话 ============
-        function sendMessage() {
+        const API_BASE_URL = window.location.hostname === 'localhost' 
+            ? 'http://localhost:5000' 
+            : 'http://101.126.54.134:5000';
+        
+        async function sendMessage() {
             const input = document.getElementById('chatInput');
             const text = input.value.trim();
             if (!text) return;
@@ -449,41 +453,80 @@
             addUserMessage(text);
             input.value = '';
             
-            // 生成回复
-            const reply = generateReply(text);
-            setTimeout(() => addAIMessage(reply), 500);
+            // 显示加载中
+            addLoadingMessage();
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/chat`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        user_id: getUserId(),
+                        message: text,
+                        progress: { chapters: userState.readChapters }
+                    })
+                });
+                
+                const data = await response.json();
+                removeLoadingMessage();
+                
+                if (data.success) {
+                    addAIMessage(data.reply);
+                } else {
+                    addAIMessage('抱歉，我暂时无法回应，请稍后再试。');
+                }
+            } catch (error) {
+                removeLoadingMessage();
+                // 降级到本地回复
+                const reply = generateLocalReply(text);
+                addAIMessage(reply);
+            }
         }
         
-        function generateReply(text) {
+        function getUserId() {
+            let id = localStorage.getItem('dzj_user_id');
+            if (!id) {
+                id = 'user_' + Date.now();
+                localStorage.setItem('dzj_user_id', id);
+            }
+            return id;
+        }
+        
+        function addLoadingMessage() {
+            const history = document.getElementById('chatHistory');
+            history.innerHTML += `
+                <div class="chat-message ai" id="loading-msg">
+                    <div class="bubble">🙏 思考中...</div>
+                </div>
+            `;
+            history.scrollTop = history.scrollHeight;
+        }
+        
+        function removeLoadingMessage() {
+            const loading = document.getElementById('loading-msg');
+            if (loading) loading.remove();
+        }
+        
+        function generateLocalReply(text) {
+            // 本地备用回复（当后端不可用时）
             const lower = text.toLowerCase();
             
-            // 检测章节询问
             for (let i = 1; i <= 10; i++) {
                 if (lower.includes(`第${i}分`) || lower.includes(`${i}分`)) {
                     return aiResponses.chapter[i] || aiResponses.default[0];
                 }
             }
             
-            // 检测概念询问
             for (let concept in aiResponses.concept) {
                 if (lower.includes(concept)) {
                     return aiResponses.concept[concept];
                 }
             }
             
-            // 检测关键词
             if (lower.includes('你好') || lower.includes('在吗')) {
                 return randomChoice(aiResponses.greeting);
             }
-            if (lower.includes('建议') || lower.includes('怎么学')) {
-                return userState.readChapters.length <= 3 ? 
-                    aiResponses.advice.beginner : aiResponses.advice.intermediate;
-            }
-            if (lower.includes('谢谢') || lower.includes('感谢')) {
-                return "不客气！愿您在《金刚经》的学习中有所收获。有问题随时问我。";
-            }
             
-            // 默认回复
             return randomChoice(aiResponses.default);
         }
         
