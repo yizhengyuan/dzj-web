@@ -7,37 +7,108 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: "Noto Serif SC", "SimSun", serif; background: #f5f0e8; color: #333; line-height: 1.8; }
-        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
-        header { text-align: center; padding: 40px 0; border-bottom: 2px solid #8b4513; margin-bottom: 30px; }
-        h1 { font-size: 2.5em; color: #8b4513; margin-bottom: 10px; }
-        .subtitle { color: #666; font-size: 1.1em; }
-        .nav { display: flex; justify-content: center; gap: 10px; margin-bottom: 30px; flex-wrap: wrap; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+        header { text-align: center; padding: 30px 0; border-bottom: 2px solid #8b4513; margin-bottom: 20px; }
+        h1 { font-size: 2.2em; color: #8b4513; margin-bottom: 8px; }
+        .subtitle { color: #666; font-size: 1em; }
+        
+        /* 学习进度卡片 */
+        .progress-card {
+            background: linear-gradient(135deg, #8b4513 0%, #a0522d 100%);
+            color: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .progress-info h3 { font-size: 1.1em; margin-bottom: 5px; }
+        .progress-info p { font-size: 0.9em; opacity: 0.9; }
+        .progress-btn {
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.4);
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        .progress-btn:hover { background: rgba(255,255,255,0.3); }
+        
+        /* 导航 */
+        .nav { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
         .nav button { padding: 10px 20px; border: 1px solid #8b4513; background: #fff; color: #8b4513; cursor: pointer; border-radius: 4px; font-family: inherit; transition: all 0.3s; }
         .nav button:hover, .nav button.active { background: #8b4513; color: #fff; }
-        .content { background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .chapter-list { display: grid; gap: 10px; }
-        .chapter-item { padding: 15px 20px; background: #faf8f5; border-left: 4px solid #8b4513; cursor: pointer; transition: all 0.3s; }
+        
+        .main-layout { display: grid; grid-template-columns: 1fr 350px; gap: 20px; }
+        @media (max-width: 900px) { .main-layout { grid-template-columns: 1fr; } }
+        
+        .content { background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        
+        /* 章节列表 */
+        .chapter-list { display: grid; gap: 8px; }
+        .chapter-item { 
+            padding: 12px 15px; background: #faf8f5; border-left: 4px solid #8b4513; 
+            cursor: pointer; transition: all 0.3s; display: flex; justify-content: space-between; align-items: center;
+        }
         .chapter-item:hover { background: #f0ebe3; transform: translateX(5px); }
-        .chapter-item .num { color: #8b4513; font-weight: bold; margin-right: 10px; }
-        .sutra-text { font-size: 1.2em; line-height: 2; text-align: justify; margin-bottom: 30px; }
-        .sutra-text .title { text-align: center; font-size: 1.5em; color: #8b4513; margin-bottom: 20px; }
-        .key-phrases { background: #faf8f5; padding: 15px 20px; border-radius: 4px; margin-bottom: 20px; }
-        .key-phrases h3 { color: #8b4513; margin-bottom: 10px; font-size: 1em; }
-        .key-phrases span { display: inline-block; padding: 5px 12px; background: #fff; border: 1px solid #ddd; border-radius: 20px; margin: 5px; font-size: 0.9em; cursor: pointer; }
+        .chapter-item .num { color: #8b4513; font-weight: bold; margin-right: 8px; }
+        .chapter-item .read-mark { color: #4caf50; font-size: 0.8em; }
+        
+        /* 经文详情 */
+        .sutra-text { font-size: 1.15em; line-height: 2; text-align: justify; margin-bottom: 25px; }
+        .sutra-text .title { text-align: center; font-size: 1.4em; color: #8b4513; margin-bottom: 15px; }
+        .key-phrases { background: #faf8f5; padding: 15px; border-radius: 4px; margin-bottom: 20px; }
+        .key-phrases h3 { color: #8b4513; margin-bottom: 10px; font-size: 0.95em; }
+        .key-phrases span { display: inline-block; padding: 4px 10px; background: #fff; border: 1px solid #ddd; border-radius: 15px; margin: 3px; font-size: 0.85em; cursor: pointer; }
         .key-phrases span:hover { background: #8b4513; color: #fff; }
-        .commentary { margin-top: 30px; padding-top: 20px; border-top: 1px dashed #ccc; }
-        .commentary h3 { color: #8b4513; margin-bottom: 15px; }
-        .commentary-item { margin-bottom: 20px; padding: 15px; background: #faf8f5; border-radius: 4px; }
-        .commentary-item .author { color: #8b4513; font-weight: bold; margin-bottom: 5px; }
-        .commentary-item .source { color: #999; font-size: 0.9em; margin-bottom: 10px; }
-        .concept-card { background: #faf8f5; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
-        .concept-card h3 { color: #8b4513; font-size: 1.5em; margin-bottom: 5px; }
-        .concept-card .sanskrit { color: #666; font-style: italic; margin-bottom: 15px; }
-        .concept-card .related { margin-top: 15px; padding-top: 15px; border-top: 1px dashed #ccc; }
+        
+        /* AI 对话区 */
+        .ai-panel { background: #fff; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); display: flex; flex-direction: column; height: 600px; }
+        .ai-header { background: #8b4513; color: #fff; padding: 15px; border-radius: 8px 8px 0 0; }
+        .ai-header h3 { font-size: 1em; }
+        .ai-header p { font-size: 0.8em; opacity: 0.9; }
+        .chat-history { flex: 1; overflow-y: auto; padding: 15px; }
+        .chat-message { margin-bottom: 15px; }
+        .chat-message.user { text-align: right; }
+        .chat-message .bubble { 
+            display: inline-block; padding: 10px 15px; border-radius: 18px; max-width: 85%; 
+            font-size: 0.95em; line-height: 1.6;
+        }
+        .chat-message.user .bubble { background: #8b4513; color: #fff; }
+        .chat-message.ai .bubble { background: #f5f0e8; color: #333; text-align: left; }
+        .chat-message .time { font-size: 0.7em; color: #999; margin-top: 3px; }
+        .chat-input { padding: 15px; border-top: 1px solid #eee; display: flex; gap: 10px; }
+        .chat-input input { flex: 1; padding: 10px 15px; border: 1px solid #ddd; border-radius: 20px; font-family: inherit; font-size: 0.95em; }
+        .chat-input button { padding: 10px 20px; background: #8b4513; color: #fff; border: none; border-radius: 20px; cursor: pointer; font-family: inherit; }
+        
+        /* 概念卡片 */
+        .concept-card { background: #faf8f5; padding: 15px; border-radius: 8px; margin-bottom: 15px; cursor: pointer; transition: all 0.3s; }
+        .concept-card:hover { background: #f0ebe3; }
+        .concept-card h3 { color: #8b4513; font-size: 1.2em; margin-bottom: 3px; }
+        .concept-card .sanskrit { color: #666; font-size: 0.85em; font-style: italic; margin-bottom: 8px; }
+        .concept-card .def { font-size: 0.9em; }
+        
+        /* 注疏 */
+        .commentary-item { margin-bottom: 15px; padding: 15px; background: #faf8f5; border-radius: 4px; }
+        .commentary-item .author { color: #8b4513; font-weight: bold; margin-bottom: 3px; }
+        .commentary-item .source { color: #999; font-size: 0.85em; margin-bottom: 8px; }
+        
         .hidden { display: none; }
-        .back-btn { display: inline-block; padding: 8px 15px; background: #f0ebe3; color: #8b4513; border-radius: 4px; margin-bottom: 20px; cursor: pointer; }
+        .back-btn { display: inline-block; padding: 6px 12px; background: #f0ebe3; color: #8b4513; border-radius: 4px; margin-bottom: 15px; cursor: pointer; font-size: 0.9em; }
         .back-btn:hover { background: #e0dbd3; }
-        footer { text-align: center; padding: 30px; color: #999; font-size: 0.9em; }
+        
+        /* 建议弹窗 */
+        .suggestion-box {
+            background: #fff3e0; border: 1px solid #ffcc80; border-radius: 8px;
+            padding: 15px; margin-bottom: 20px; position: relative;
+        }
+        .suggestion-box h4 { color: #e65100; margin-bottom: 8px; font-size: 0.95em; }
+        .suggestion-box p { font-size: 0.9em; color: #666; }
+        .suggestion-box .close { position: absolute; top: 10px; right: 10px; cursor: pointer; color: #999; }
+        
+        footer { text-align: center; padding: 20px; color: #999; font-size: 0.85em; }
     </style>
 </head>
 <body>
@@ -47,30 +118,65 @@
             <p class="subtitle">金刚般若波罗蜜经 · 交互学习</p>
         </header>
         
+        <!-- 学习进度 -->
+        <div class="progress-card">
+            <div class="progress-info">
+                <h3>📚 你的学习进度</h3>
+                <p id="progressText">已读 0/10 分，继续加油！</p>
+            </div>
+            <button class="progress-btn" onclick="showSuggestion()">查看学习建议</button>
+        </div>
+        
+        <!-- 学习建议弹窗 -->
+        <div id="suggestionBox" class="suggestion-box hidden">
+            <span class="close" onclick="hideSuggestion()">×</span>
+            <h4>🎯 学习建议</h4>
+            <p id="suggestionText">开始你的金刚经学习之旅吧！建议从第1分开始循序渐进。</p>
+        </div>
+        
         <nav class="nav">
             <button class="active" onclick="showView('chapters')">经文章节</button>
             <button onclick="showView('concepts')">核心概念</button>
             <button onclick="showView('commentaries')">历代注疏</button>
         </nav>
         
-        <div class="content">
-            <div id="chapters-view" class="view">
-                <div class="chapter-list" id="chapterList"></div>
+        <div class="main-layout">
+            <div class="content-area">
+                <!-- 章节列表 -->
+                <div id="chapters-view" class="view content">
+                    <div class="chapter-list" id="chapterList"></div>
+                </div>
+                
+                <!-- 章节详情 -->
+                <div id="chapter-detail" class="view content hidden">
+                    <span class="back-btn" onclick="backToChapters()">← 返回</span>
+                    <div class="sutra-text" id="sutraText"></div>
+                    <div class="key-phrases" id="keyPhrases"></div>
+                    <div id="commentarySection"></div>
+                </div>
+                
+                <!-- 核心概念 -->
+                <div id="concepts-view" class="view content hidden">
+                    <div id="conceptsList"></div>
+                </div>
+                
+                <!-- 注疏列表 -->
+                <div id="commentaries-view" class="view content hidden">
+                    <div id="commentariesList"></div>
+                </div>
             </div>
             
-            <div id="chapter-detail" class="view hidden">
-                <span class="back-btn" onclick="backToChapters()">← 返回章节列表</span>
-                <div class="sutra-text" id="sutraText"></div>
-                <div class="key-phrases" id="keyPhrases"></div>
-                <div class="commentary" id="commentarySection"></div>
-            </div>
-            
-            <div id="concepts-view" class="view hidden">
-                <div id="conceptsList"></div>
-            </div>
-            
-            <div id="commentaries-view" class="view hidden">
-                <div id="commentariesList"></div>
+            <!-- AI 对话面板 -->
+            <div class="ai-panel">
+                <div class="ai-header">
+                    <h3>🙏 智能佛学助手</h3>
+                    <p>问我关于金刚经的问题</p>
+                </div>
+                <div class="chat-history" id="chatHistory"></div>
+                <div class="chat-input">
+                    <input type="text" id="chatInput" placeholder="输入问题..." onkeypress="if(event.key==='Enter')sendMessage()">
+                    <button onclick="sendMessage()">发送</button>
+                </div>
             </div>
         </div>
         
@@ -78,19 +184,20 @@
             <p>愿以此功德，普及于一切</p>
         </footer>
     </div>
-    
+
     <script>
+        // ============ 数据 ============
         const chapters = [
-            { num: 1, title: "法会因由分", content: "如是我闻。一时佛在舍卫国祇树给孤独园，与大比丘众千二百五十人俱。尔时世尊，食时，著衣持钵，入舍卫大城乞食。于其城中次第乞已，还至本处。饭食讫，收衣钵，洗足已，敷座而坐。", phrases: ["如是我闻", "祇树给孤独园", "次第乞食"] },
-            { num: 2, title: "善现启请分", content: "时长老须菩提，在大众中，即从座起，偏袒右肩，右膝著地，合掌恭敬而白佛言：「希有世尊！如来善护念诸菩萨，善付嘱诸菩萨。世尊！善男子、善女人，发阿耨多罗三藐三菩提心，应云何住？云何降伏其心？」佛言：「善哉善哉！须菩提！如汝所说，如来善护念诸菩萨，善付嘱诸菩萨。汝今谛听，当为汝说。善男子、善女人，发阿耨多罗三藐三菩提心，应如是住，如是降伏其心。」「唯然，世尊！愿乐欲闻。」", phrases: ["须菩提", "阿耨多罗三藐三菩提心", "应云何住", "降伏其心"] },
-            { num: 3, title: "大乘正宗分", content: "佛告须菩提：「诸菩萨摩诃萨，应如是降伏其心：所有一切众生之类，若卵生、若胎生、若湿生、若化生，若有色、若无色，若有想、若无想，若非有想非无想，我皆令入无余涅槃而灭度之。如是灭度无量无数无边众生，实无众生得灭度者。何以故？须菩提！若菩萨有我相、人相、众生相、寿者相，即非菩萨。」", phrases: ["降伏其心", "无余涅槃", "我相人相众生相寿者相"] },
-            { num: 4, title: "妙行无住分", content: "「复次须菩提！菩萨于法，应无所住，行于布施。所谓不住色布施，不住声香味触法布施。须菩提！菩萨应如是布施，不住于相。何以故？若菩萨不住相布施，其福德不可思量。须菩提！于意云何？东方虚空可思量不？」「不也，世尊！」「须菩提！南西北方四维上下虚空，可思量不？」「不也，世尊！」「须菩提！菩萨无住相布施，福德亦复如是，不可思量。须菩提！菩萨但应如所教住。」", phrases: ["应无所住", "行于布施", "不住相布施", "福德不可思量"] },
-            { num: 5, title: "如理实见分", content: "「须菩提！于意云何？可以身相见如来不？」「不也，世尊！不可以身相得见如来。何以故？如来所说身相，即非身相。」佛告须菩提：「凡所有相，皆是虚妄。若见诸相非相，即见如来。」", phrases: ["不可以身相见如来", "凡所有相皆是虚妄", "若见诸相非相即见如来"] },
-            { num: 6, title: "正信希有分", content: "须菩提白佛言：「世尊！颇有众生，得闻如是言说章句，生实信不？」佛告须菩提：「莫作是说！如来灭后，后五百岁，有持戒修福者，于此章句，能生信心，以此为实。当知是人，不于一佛二佛三四五佛而种善根，已于无量千万佛所种诸善根。闻是章句，乃至一念生净信者，须菩提！如来悉知悉见，是诸众生，得如是无量福德。何以故？是诸众生，无复我相、人相、众生相、寿者相，无法相，亦无非法相。何以故？是诸众生，若心取相，即为著我、人、众生、寿者；若取法相，即著我、人、众生、寿者。何以故？若取非法相，即著我、人、众生、寿者。是故不应取法，不应取非法。以是义故，如来常说：『汝等比丘！知我说法，如筏喻者，法尚应舍，何况非法。』」", phrases: ["后五百岁", "持戒修福", "一念生净信", "筏喻", "法尚应舍"] },
-            { num: 7, title: "无得无说分", content: "「须菩提！于意云何？如来得阿耨多罗三藐三菩提耶？如来有所说法耶？」须菩提言：「如我解佛所说义，无有定法名阿耨多罗三藐三菩提，亦无有定法如来可说。何以故？如来所说法，皆不可取、不可说，非法、非非法。所以者何？一切贤圣，皆以无为法而有差别。」", phrases: ["无有定法", "不可取不可说", "非法非非法", "无为法"] },
-            { num: 8, title: "依法出生分", content: "「须菩提！于意云何？若人满三千大千世界七宝，以用布施，是人所得福德，宁为多不？」须菩提言：「甚多，世尊！何以故？是福德，即非福德性，是故如来说福德多。」「若复有人，于此经中，受持乃至四句偈等，为他人说，其福胜彼。何以故？须菩提！一切诸佛，及诸佛阿耨多罗三藐三菩提法，皆从此经出。须菩提！所谓佛法者，即非佛法。」", phrases: ["三千大千世界七宝布施", "四句偈", "一切诸佛皆从此经出"] },
-            { num: 9, title: "一相无相分", content: "「须菩提！于意云何？须陀洹能作是念：『我得须陀洹果』不？」须菩提言：「不也，世尊！何以故？须陀洹名为入流，而无所入，不入色声香味触法，是名须陀洹。」...", phrases: ["须陀洹", "斯陀含", "阿那含", "阿罗汉"] },
-            { num: 10, title: "庄严净土分", content: "佛告须菩提：「于意云何？如来昔在然灯佛所，于法有所得不？」「不也，世尊！如来在然灯佛所，于法实无所得。」「须菩提！于意云何？菩萨庄严佛土不？」「不也，世尊！何以故？庄严佛土者，即非庄严，是名庄严。」「是故须菩提！诸菩萨摩诃萨，应如是生清净心，不应住色生心，不应住声香味触法生心，应无所住而生其心。」", phrases: ["然灯佛", "庄严佛土", "应无所住而生其心"] }
+            { num: 1, title: "法会因由分", content: "如是我闻。一时佛在舍卫国祇树给孤独园，与大比丘众千二百五十人俱。尔时世尊，食时，著衣持钵，入舍卫大城乞食。于其城中次第乞已，还至本处。饭食讫，收衣钵，洗足已，敷座而坐。", phrases: ["如是我闻", "祇树给孤独园", "次第乞食"], difficulty: "入门" },
+            { num: 2, title: "善现启请分", content: "时长老须菩提，在大众中，即从座起，偏袒右肩，右膝著地，合掌恭敬而白佛言：「希有世尊！如来善护念诸菩萨，善付嘱诸菩萨。世尊！善男子、善女人，发阿耨多罗三藐三菩提心，应云何住？云何降伏其心？」佛言：「善哉善哉！须菩提！如汝所说，如来善护念诸菩萨，善付嘱诸菩萨。汝今谛听，当为汝说。善男子、善女人，发阿耨多罗三藐三菩提心，应如是住，如是降伏其心。」「唯然，世尊！愿乐欲闻。」", phrases: ["须菩提", "阿耨多罗三藐三菩提心", "应云何住", "降伏其心"], difficulty: "核心" },
+            { num: 3, title: "大乘正宗分", content: "佛告须菩提：「诸菩萨摩诃萨，应如是降伏其心：所有一切众生之类，若卵生、若胎生、若湿生、若化生，若有色、若无色，若有想、若无想，若非有想非无想，我皆令入无余涅槃而灭度之。如是灭度无量无数无边众生，实无众生得灭度者。何以故？须菩提！若菩萨有我相、人相、众生相、寿者相，即非菩萨。」", phrases: ["降伏其心", "无余涅槃", "我相人相众生相寿者相"], difficulty: "进阶" },
+            { num: 4, title: "妙行无住分", content: "「复次须菩提！菩萨于法，应无所住，行于布施。所谓不住色布施，不住声香味触法布施。须菩提！菩萨应如是布施，不住于相。何以故？若菩萨不住相布施，其福德不可思量。须菩提！于意云何？东方虚空可思量不？」「不也，世尊！」「须菩提！南西北方四维上下虚空，可思量不？」「不也，世尊！」「须菩提！菩萨无住相布施，福德亦复如是，不可思量。须菩提！菩萨但应如所教住。」", phrases: ["应无所住", "行于布施", "不住相布施", "福德不可思量"], difficulty: "核心" },
+            { num: 5, title: "如理实见分", content: "「须菩提！于意云何？可以身相见如来不？」「不也，世尊！不可以身相得见如来。何以故？如来所说身相，即非身相。」佛告须菩提：「凡所有相，皆是虚妄。若见诸相非相，即见如来。」", phrases: ["不可以身相见如来", "凡所有相皆是虚妄", "若见诸相非相即见如来"], difficulty: "核心" },
+            { num: 6, title: "正信希有分", content: "须菩提白佛言：「世尊！颇有众生，得闻如是言说章句，生实信不？」佛告须菩提：「莫作是说！如来灭后，后五百岁，有持戒修福者，于此章句，能生信心，以此为实。当知是人，不于一佛二佛三四五佛而种善根，已于无量千万佛所种诸善根。闻是章句，乃至一念生净信者，须菩提！如来悉知悉见，是诸众生，得如是无量福德。何以故？是诸众生，无复我相、人相、众生相、寿者相，无法相，亦无非法相。何以故？是诸众生，若心取相，即为著我、人、众生、寿者；若取法相，即著我、人、众生、寿者。何以故？若取非法相，即著我、人、众生、寿者。是故不应取法，不应取非法。以是义故，如来常说：『汝等比丘！知我说法，如筏喻者，法尚应舍，何况非法。』」", phrases: ["后五百岁", "持戒修福", "一念生净信", "筏喻", "法尚应舍"], difficulty: "进阶" },
+            { num: 7, title: "无得无说分", content: "「须菩提！于意云何？如来得阿耨多罗三藐三菩提耶？如来有所说法耶？」须菩提言：「如我解佛所说义，无有定法名阿耨多罗三藐三菩提，亦无有定法如来可说。何以故？如来所说法，皆不可取、不可说，非法、非非法。所以者何？一切贤圣，皆以无为法而有差别。」", phrases: ["无有定法", "不可取不可说", "非法非非法", "无为法"], difficulty: "高阶" },
+            { num: 8, title: "依法出生分", content: "「须菩提！于意云何？若人满三千大千世界七宝，以用布施，是人所得福德，宁为多不？」须菩提言：「甚多，世尊！何以故？是福德，即非福德性，是故如来说福德多。」「若复有人，于此经中，受持乃至四句偈等，为他人说，其福胜彼。何以故？须菩提！一切诸佛，及诸佛阿耨多罗三藐三菩提法，皆从此经出。须菩提！所谓佛法者，即非佛法。」", phrases: ["三千大千世界七宝布施", "四句偈", "一切诸佛皆从此经出"], difficulty: "核心" },
+            { num: 9, title: "一相无相分", content: "「须菩提！于意云何？须陀洹能作是念：『我得须陀洹果』不？」须菩提言：「不也，世尊！何以故？须陀洹名为入流，而无所入，不入色声香味触法，是名须陀洹。」...", phrases: ["须陀洹", "斯陀含", "阿那含", "阿罗汉"], difficulty: "高阶" },
+            { num: 10, title: "庄严净土分", content: "佛告须菩提：「于意云何？如来昔在然灯佛所，于法有所得不？」「不也，世尊！如来在然灯佛所，于法实无所得。」「须菩提！于意云何？菩萨庄严佛土不？」「不也，世尊！何以故？庄严佛土者，即非庄严，是名庄严。」「是故须菩提！诸菩萨摩诃萨，应如是生清净心，不应住色生心，不应住声香味触法生心，应无所住而生其心。」", phrases: ["然灯佛", "庄严佛土", "应无所住而生其心"], difficulty: "核心" }
         ];
         
         const concepts = [
@@ -114,29 +221,105 @@
             { author: "江味农居士", dynasty: "民国", title: "金刚经讲义", type: "讲记", excerpt: "金刚般若波罗蜜经，乃六百卷大般若之精华。佛说此经，专为发大乘者、发最上乘者，示以究竟无住之妙法。'金刚'有三义：坚固义、光明义、锐利义。佛日常乞食、食讫、洗足、敷座，皆示平常日用即是道也。" }
         ];
         
+        // AI 回复模板
+        const aiResponses = {
+            greeting: [
+                "善哉！我是你的佛学学习助手。今天想了解《金刚经》的哪部分内容呢？",
+                "阿弥陀佛！欢迎学习《金刚经》。我可以为你解释经文、讲解概念、或者根据你的学习进度给出建议。",
+                "您好！《金刚经》是般若部的核心经典。有什么我可以帮助您的吗？"
+            ],
+            chapter: {
+                1: "第一分是说法的缘起。佛示现平常的乞食、洗足、敷座，告诉我们：修行就在日常日用之间，不必别求玄妙。",
+                2: "第二分是须菩提请问，也是全经的纲宗。『应云何住？云何降伏其心？』这两个问题，是一切修行者最关心的。",
+                3: "第三分讲大乘正宗。度众生而无众生可度，这是般若的妙用——既要积极行善，又不可执着。",
+                4: "第四分『应无所住而生其心』是《金刚经》的核心。不住相布施，福德才不可思量。",
+                5: "第五分讲见如来的正确方式。凡所有相皆是虚妄，若见诸相非相，即见如来。",
+                6: "第六分讲正信希有。后五百岁还能信受此法的人，已在无量佛所种善根。法尚应舍，何况非法。",
+                7: "第七分讲无得无说。如来所得所说法，皆不可取不可说，一切贤圣以无为法而有差别。",
+                8: "第八分讲持经的功德。受持四句偈为他人说，胜七宝布施。一切诸佛皆从此经出。",
+                9: "第九分讲四果圣人皆不执着果位。须陀洹名为入流而无所入，斯陀含名一往来而实无往来...",
+                10: "第十分讲庄严净土。应无所住而生其心，这是《金刚经》最著名的一句，也是六祖惠能闻而悟道的句子。"
+            },
+            concept: {
+                "般若": "般若是梵语Prajñā的音译，意为『智慧』。但不是世间聪明，而是通达诸法实相的究竟智慧，能照见五蕴皆空。",
+                "无住": "无住即心不执着于任何境界。应无所住而生其心——既要生起度众生的悲心，又不住于任何相。",
+                "无相": "无相是不执着于形相。凡所有相皆是虚妄，只有不取于相，才能见到真正的如来。",
+                "空性": "空性不是虚无，而是诸法无自性、缘起性空。正因为空，才能缘起万法。",
+                "波罗蜜": "波罗蜜是『到彼岸』的意思。从生死此岸，度到涅槃彼岸，需要六度万行。",
+                "阿耨多罗三藐三菩提": "这是梵语Anuttara-samyak-saṃbodhi，意为『无上正等正觉』，即佛果。"
+            },
+            advice: {
+                beginner: "您刚开始学习，建议循序渐进：先读第1-5分，理解基本框架。重点关注『应无所住而生其心』。",
+                intermediate: "您已读了一半以上！建议开始阅读憨山大师的《金刚经决疑》，深入理解『无住生心』的奥义。",
+                advanced: "善哉！您已读完全部10分。建议回顾第2、4、10分，这三处是《金刚经》的核心。可以尝试背诵『凡所有相，皆是虚妄』等关键句。"
+            },
+            default: [
+                "这个问题很有深度。《金刚经》讲『不可说』，但我可以尝试为您解释...",
+                "善哉此问！建议结合具体章节来理解，您最近在读哪一分呢？",
+                "这是一个很好的修行问题。您可以从『无住』的角度来思考...",
+                "《金刚经》的智慧甚深，建议多诵读原文，自然会有体会。"
+            ]
+        };
+        
+        // ============ 状态管理 ============
+        let userState = {
+            readChapters: [],
+            readConcepts: [],
+            chatHistory: [],
+            lastVisit: null
+        };
+        
+        // 从 localStorage 加载
+        function loadState() {
+            const saved = localStorage.getItem('dzjUserState');
+            if (saved) {
+                userState = JSON.parse(saved);
+            }
+        }
+        
+        // 保存到 localStorage
+        function saveState() {
+            localStorage.setItem('dzjUserState', JSON.stringify(userState));
+        }
+        
+        // ============ 初始化 ============
         function init() {
+            loadState();
             renderChapters();
             renderConcepts();
             renderCommentaries();
+            updateProgress();
+            loadChatHistory();
+            
+            // 首次访问问候
+            if (userState.chatHistory.length === 0) {
+                addAIMessage(randomChoice(aiResponses.greeting));
+            } else {
+                addAIMessage("欢迎回来！上次学习到第" + Math.max(...userState.readChapters, 0) + "分，继续吗？");
+            }
         }
         
+        // ============ 渲染 ============
         function renderChapters() {
             const list = document.getElementById('chapterList');
-            list.innerHTML = chapters.map(c => `
-                <div class="chapter-item" onclick="showChapter(${c.num})">
-                    <span class="num">第${c.num}分</span>${c.title}
-                </div>
-            `).join('');
+            list.innerHTML = chapters.map(c => {
+                const isRead = userState.readChapters.includes(c.num);
+                return `
+                    <div class="chapter-item" onclick="showChapter(${c.num})">
+                        <span><span class="num">第${c.num}分</span>${c.title} <small style="color:#999">[${c.difficulty}]</small></span>
+                        ${isRead ? '<span class="read-mark">✓ 已读</span>' : ''}
+                    </div>
+                `;
+            }).join('');
         }
         
         function renderConcepts() {
             const list = document.getElementById('conceptsList');
             list.innerHTML = concepts.map(c => `
-                <div class="concept-card">
+                <div class="concept-card" onclick="askConcept('${c.name}')">
                     <h3>${c.name}</h3>
                     <div class="sanskrit">${c.sanskrit}</div>
-                    <div>${c.def}</div>
-                    <div class="related"><strong>相关章节：</strong>第${c.chapters.join('、')}分</div>
+                    <div class="def">${c.def.substring(0, 50)}...</div>
                 </div>
             `).join('');
         }
@@ -152,9 +335,18 @@
             `).join('');
         }
         
+        // ============ 交互 ============
         function showChapter(num) {
             const c = chapters.find(x => x.num === num);
             if (!c) return;
+            
+            // 记录阅读
+            if (!userState.readChapters.includes(num)) {
+                userState.readChapters.push(num);
+                saveState();
+                updateProgress();
+                renderChapters();
+            }
             
             document.getElementById('sutraText').innerHTML = `
                 <div class="title">第${c.num}分 ${c.title}</div>
@@ -162,20 +354,22 @@
             `;
             
             document.getElementById('keyPhrases').innerHTML = `
-                <h3>关键句</h3>
-                ${c.phrases.map(p => `<span>${p}</span>`).join('')}
+                <h3>关键句（点击询问AI）</h3>
+                ${c.phrases.map(p => `<span onclick="askPhrase('${p}')">${p}</span>`).join('')}
             `;
             
-            const related = commentaries.slice(0, 3);
+            const related = commentaries.slice(0, 2);
             document.getElementById('commentarySection').innerHTML = `
-                <h3>历代注疏</h3>
-                ${related.map(com => `
-                    <div class="commentary-item">
-                        <div class="author">${com.author}</div>
-                        <div class="source">${com.dynasty} · 《${com.title}》</div>
-                        <div>${com.excerpt.substring(0, 150)}...</div>
-                    </div>
-                `).join('')}
+                <div class="commentary">
+                    <h3>历代注疏</h3>
+                    ${related.map(com => `
+                        <div class="commentary-item">
+                            <div class="author">${com.author}</div>
+                            <div class="source">${com.dynasty} · 《${com.title}》</div>
+                            <div>${com.excerpt.substring(0, 120)}...</div>
+                        </div>
+                    `).join('')}
+                </div>
             `;
             
             showView('chapter-detail');
@@ -203,6 +397,168 @@
             showView('chapters');
         }
         
+        // ============ 进度和建议 ============
+        function updateProgress() {
+            const count = userState.readChapters.length;
+            const total = chapters.length;
+            document.getElementById('progressText').textContent = 
+                `已读 ${count}/${total} 分${count > 0 ? '，' + getProgressComment(count) : ''}`;
+        }
+        
+        function getProgressComment(count) {
+            if (count <= 2) return '初学者起步';
+            if (count <= 5) return '渐入佳境';
+            if (count <= 8) return '精进不懈';
+            return '功德圆满';
+        }
+        
+        function showSuggestion() {
+            const count = userState.readChapters.length;
+            let suggestion = '';
+            
+            if (count === 0) {
+                suggestion = '开始你的金刚经学习之旅吧！建议从第1分开始，循序渐进。';
+            } else if (count <= 3) {
+                suggestion = aiResponses.advice.beginner;
+            } else if (count <= 7) {
+                suggestion = aiResponses.advice.intermediate;
+            } else {
+                suggestion = aiResponses.advice.advanced;
+            }
+            
+            // 添加个性化建议
+            const unreadCore = [2, 4, 5, 8, 10].filter(n => !userState.readChapters.includes(n));
+            if (unreadCore.length > 0 && count > 0) {
+                suggestion += ` 建议优先阅读核心章节：第${unreadCore.slice(0, 2).join('、')}分。`;
+            }
+            
+            document.getElementById('suggestionText').textContent = suggestion;
+            document.getElementById('suggestionBox').classList.remove('hidden');
+        }
+        
+        function hideSuggestion() {
+            document.getElementById('suggestionBox').classList.add('hidden');
+        }
+        
+        // ============ AI 对话 ============
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const text = input.value.trim();
+            if (!text) return;
+            
+            addUserMessage(text);
+            input.value = '';
+            
+            // 生成回复
+            const reply = generateReply(text);
+            setTimeout(() => addAIMessage(reply), 500);
+        }
+        
+        function generateReply(text) {
+            const lower = text.toLowerCase();
+            
+            // 检测章节询问
+            for (let i = 1; i <= 10; i++) {
+                if (lower.includes(`第${i}分`) || lower.includes(`${i}分`)) {
+                    return aiResponses.chapter[i] || aiResponses.default[0];
+                }
+            }
+            
+            // 检测概念询问
+            for (let concept in aiResponses.concept) {
+                if (lower.includes(concept)) {
+                    return aiResponses.concept[concept];
+                }
+            }
+            
+            // 检测关键词
+            if (lower.includes('你好') || lower.includes('在吗')) {
+                return randomChoice(aiResponses.greeting);
+            }
+            if (lower.includes('建议') || lower.includes('怎么学')) {
+                return userState.readChapters.length <= 3 ? 
+                    aiResponses.advice.beginner : aiResponses.advice.intermediate;
+            }
+            if (lower.includes('谢谢') || lower.includes('感谢')) {
+                return "不客气！愿您在《金刚经》的学习中有所收获。有问题随时问我。";
+            }
+            
+            // 默认回复
+            return randomChoice(aiResponses.default);
+        }
+        
+        function askConcept(name) {
+            document.getElementById('chatInput').value = `什么是${name}？`;
+            sendMessage();
+        }
+        
+        function askPhrase(phrase) {
+            document.getElementById('chatInput').value = `请解释「${phrase}」`;
+            sendMessage();
+        }
+        
+        function addUserMessage(text) {
+            const history = document.getElementById('chatHistory');
+            const time = new Date().toLocaleTimeString('zh-CN', {hour: '2-digit', minute: '2-digit'});
+            history.innerHTML += `
+                <div class="chat-message user">
+                    <div class="bubble">${text}</div>
+                    <div class="time">${time}</div>
+                </div>
+            `;
+            history.scrollTop = history.scrollHeight;
+            
+            userState.chatHistory.push({type: 'user', text, time});
+            saveState();
+        }
+        
+        function addAIMessage(text) {
+            const history = document.getElementById('chatHistory');
+            const time = new Date().toLocaleTimeString('zh-CN', {hour: '2-digit', minute: '2-digit'});
+            history.innerHTML += `
+                <div class="chat-message ai">
+                    <div class="bubble">${text}</div>
+                    <div class="time">${time}</div>
+                </div>
+            `;
+            history.scrollTop = history.scrollHeight;
+            
+            userState.chatHistory.push({type: 'ai', text, time});
+            saveState();
+        }
+        
+        function loadChatHistory() {
+            const history = document.getElementById('chatHistory');
+            history.innerHTML = '';
+            
+            // 只显示最近20条
+            const recent = userState.chatHistory.slice(-20);
+            recent.forEach(msg => {
+                if (msg.type === 'user') {
+                    history.innerHTML += `
+                        <div class="chat-message user">
+                            <div class="bubble">${msg.text}</div>
+                            <div class="time">${msg.time}</div>
+                        </div>
+                    `;
+                } else {
+                    history.innerHTML += `
+                        <div class="chat-message ai">
+                            <div class="bubble">${msg.text}</div>
+                            <div class="time">${msg.time}</div>
+                        </div>
+                    `;
+                }
+            });
+            history.scrollTop = history.scrollHeight;
+        }
+        
+        // 工具函数
+        function randomChoice(arr) {
+            return arr[Math.floor(Math.random() * arr.length)];
+        }
+        
+        // 启动
         init();
     </script>
 </body>
